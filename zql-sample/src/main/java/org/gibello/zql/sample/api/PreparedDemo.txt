@@ -1,0 +1,9 @@
+
+UPDATE MYTABLE SET COl1=1, COl2 = ?, COl3 = '?' WHERE COL4 = ? AND COL5 =?;
+INSERT INTO MYTABLE (Col1, col2, col3) values (?,'1', ?);
+SELECT COL1, COl2, COL3 from Mytable1, Mytable2 where MyTable1.COl4 = ? and MyTable2.COl5 = ?;
+select col1 from myschema.mytable where myschema.mytable.col1=?;
+select col1 from mytable t where t.col2=?;
+delete from t where y=?;
+
+quit;

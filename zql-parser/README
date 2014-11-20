@@ -1,0 +1,33 @@
+To run Zql:
+===========
+
+java org.gibello.zql.ZqlParser
+
+(the classpath has to point on the ZQL jar file,
+eg. zql-parser/target/zql-1.0-SNAPSHOT.jar).
+
+If you have a source release of Zql:
+====================================
+
+1) To generate the parser
+
+Maven is required, and the Zql build uses the JavaCC maven plugin.
+
+To build zql:
+mvn clean install
+
+2) Source files
+
+The javacc grammar lies in the zql-parser/src/main/javacc directory.
+
+In the src/main/java directory, you will find:
+- The org/gibello/zql directory contains the sources for the Zql API classes.
+- The org/gibello/zql/data directory contains the sources for the basic
+expression evaluator that comes with Zql (used in the Zql demo).
+
+3) To generate the doc
+
+mvn javadoc:javadoc
+
+The doc is then generated in zql-parser/target/site/apidocs .
+

@@ -1,0 +1,1981 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE>SQL Tutorial</TITLE>
+   <META NAME="Author" CONTENT="James Hoffman">
+   <META NAME="Description" CONTENT="This is an introduction to Structured Query Language">
+   <META NAME="KeyWords" CONTENT="SQL, Tutorial, Structured, Query, Language, Database, Programming">
+   <META NAME="Content" CONTENT="Introduction to Structured Query Language">
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#800080" ALINK="#0000FF">
+
+<H1><FONT COLOR="#0000FF">Introduction to Structured Query Language</FONT></H1>
+
+<P><B><TT><FONT COLOR="#FF0000"><FONT SIZE=+1>Version 3.31</FONT></FONT></TT></B></P>
+
+<P>This page is a tutorial of the <I>Structured Query Language </I>(also
+known as <B>SQL</B>) and is a pioneering effort on the World Wide Web,
+as this is the first comprehensive SQL tutorial available on the Internet.
+SQL allows users to access data in relational database management systems,
+such as Oracle, Sybase, Informix, Microsoft SQL Server, Access, and others,
+by allowing users to describe the data the user wishes to see. SQL also
+allows users to define the data in a database, and manipulate that data.
+This page will describe how to use SQL, and give examples. The SQL used
+in this document is &quot;ANSI&quot;, or standard SQL, and no SQL features
+of specific database management systems will be discussed until the &quot;Nonstandard
+SQL&quot; section. It is recommended that you print this page, so that
+you can easily refer back to previous examples. 
+<HR WIDTH="100%"><B><FONT COLOR="#800040"><FONT SIZE=+2>Table of Contents</FONT></FONT></B></P>
+
+<UL>
+<P><A HREF="#Basics of the SELECT Statement">Basics of the SELECT Statement
+<BR>
+</A><A HREF="#Conditional Selection">Conditional Selection <BR>
+</A><A HREF="#Relational Operators">Relational Operators <BR>
+</A><A HREF="#Compound Conditions">Compound Conditions <BR>
+</A><A HREF="#IN & BETWEEN">IN &amp; BETWEEN <BR>
+</A><A HREF="#Using LIKE">Using LIKE </A></P>
+</UL>
+
+<UL>
+<P><A HREF="#Joins">Joins <BR>
+</A><A HREF="#Keys">Keys <BR>
+</A><A HREF="#Performing a Join">Performing a Join <BR>
+</A><A HREF="#Eliminating Duplicates">Eliminating Duplicates <BR>
+</A><A HREF="#Aliases & In/Subqueries">Aliases &amp; In/Subqueries </A></P>
+
+<P><A HREF="#Aggregate Functions">Aggregate Functions</A> <BR>
+<A HREF="#Views">Views</A> <BR>
+<A HREF="#Creating New Tables">Creating New Tables</A> <BR>
+<A HREF="#Altering Tables">Altering Tables</A> <BR>
+<A HREF="#Adding Data">Adding Data</A> <BR>
+<A HREF="#Deleting Data">Deleting Data</A> <BR>
+<A HREF="#Updating Data">Updating Data</A> </P>
+</UL>
+
+<UL>
+<P><A HREF="#Indexes">Indexes</A> <BR>
+<A HREF="#GROUP BY & HAVING">GROUP BY &amp; HAVING</A> <BR>
+<A HREF="#More Subqueries">More Subqueries<BR>
+</A><A HREF="#EXISTS & ALL">EXISTS &amp; ALL</A> <BR>
+<A HREF="#UNION & Outer Joins">UNION &amp; Outer Joins</A> <BR>
+<A HREF="#Embedded SQL">Embedded SQL</A> <BR>
+<A HREF="#Common SQL Questions">Common SQL Questions</A> <BR>
+<A HREF="#Nonstandard SQL">Nonstandard SQL</A> <BR>
+<A HREF="#Syntax Summary">Syntax Summary</A> <BR>
+<A HREF="#Important Links">Important Links</A> </P>
+</UL>
+
+<P>
+<HR><A NAME="Basics of the SELECT Statement"></A><FONT SIZE=+2><B>Basics
+of the SELECT Statement</B> </FONT></P>
+
+<P>In a relational database, data is stored in tables. An example table
+would relate Social Security Number, Name, and Address: </P>
+
+<TABLE BORDER=1 >
+<TR>
+<TH COLSPAN=6>
+<CENTER><P><B>EmployeeAddressTable</B> </P></CENTER>
+</TH>
+</TR>
+
+<TR>
+<TD nowrap><B>SSN</B></TD>
+
+<TD nowrap><B>FirstName</B></TD>
+
+<TD nowrap><B>LastName</B> </TD>
+
+<TD nowrap><B>Address</B></TD>
+
+<TD nowrap><B>City</B></TD>
+
+<TD nowrap><B>State</B> </TD>
+</TR>
+
+<TR>
+<TD nowrap>512687458</TD>
+
+<TD nowrap>Joe</TD>
+
+<TD nowrap>Smith </TD>
+
+<TD nowrap>83 First Street</TD>
+
+<TD nowrap>Howard</TD>
+
+<TD nowrap>Ohio </TD>
+</TR>
+
+<TR>
+<TD nowrap>758420012</TD>
+
+<TD nowrap>Mary</TD>
+
+<TD nowrap>Scott </TD>
+
+<TD nowrap>842 Vine Ave.</TD>
+
+<TD nowrap>Losantiville</TD>
+
+<TD nowrap>Ohio </TD>
+</TR>
+
+<TR>
+<TD nowrap>102254896</TD>
+
+<TD nowrap>Sam</TD>
+
+<TD nowrap>Jones </TD>
+
+<TD nowrap>33 Elm St.</TD>
+
+<TD nowrap>Paris</TD>
+
+<TD nowrap>New York </TD>
+</TR>
+
+<TR>
+<TD nowrap>876512563</TD>
+
+<TD nowrap>Sarah</TD>
+
+<TD nowrap>Ackerman </TD>
+
+<TD nowrap>440 U.S. 110</TD>
+
+<TD nowrap>Upton</TD>
+
+<TD nowrap>Michigan </TD>
+</TR>
+</TABLE>
+
+<P>Now, let's say you want to see the address of each employee. Use the
+SELECT statement, like so: </P>
+
+<P><TT>SELECT FirstName, LastName, Address, City, State <BR>
+FROM EmployeeAddressTable; </TT></P>
+
+<P>The following is the results of your <I>query</I> of the database: </P>
+
+<TABLE BORDER=1 >
+<TR>
+<TD nowrap><B>First Name</B></TD>
+
+<TD nowrap><B>Last Name</B> </TD>
+
+<TD nowrap><B>Address</B></TD>
+
+<TD nowrap><B>City</B></TD>
+
+<TD nowrap><B>State</B> </TD>
+</TR>
+
+<TR>
+<TD nowrap>Joe</TD>
+
+<TD nowrap>Smith</TD>
+
+<TD nowrap>83 First Street </TD>
+
+<TD nowrap>Howard</TD>
+
+<TD nowrap>Ohio</TD>
+</TR>
+
+<TR>
+<TD nowrap>Mary</TD>
+
+<TD nowrap>Scott</TD>
+
+<TD nowrap>842 Vine Ave. </TD>
+
+<TD nowrap>Losantiville</TD>
+
+<TD nowrap>Ohio</TD>
+</TR>
+
+<TR>
+<TD nowrap>Sam</TD>
+
+<TD nowrap>Jones</TD>
+
+<TD nowrap>33 Elm St. </TD>
+
+<TD nowrap>Paris</TD>
+
+<TD nowrap>New York</TD>
+</TR>
+
+<TR>
+<TD nowrap>Sarah</TD>
+
+<TD nowrap>Ackerman</TD>
+
+<TD nowrap>440 U.S. 110 </TD>
+
+<TD nowrap>Upton</TD>
+
+<TD nowrap>Michigan</TD>
+</TR>
+</TABLE>
+
+<P>To explain what you just did, you asked for the all of data in the EmployeeAddressTable,
+and specifically, you asked for the <I>columns</I> called FirstName, LastName,
+Address, City, and State. Note that column names and table names do not
+have spaces...they must be typed as one word; and that the statement ends
+with a semicolon (;). The general form for a SELECT statement, retrieving
+all of the <I>rows</I> in the table is: </P>
+
+<P><TT>SELECT ColumnName, ColumnName, ... <BR>
+FROM TableName; </TT></P>
+
+<P>To get all columns of a table without typing all column names, use:
+</P>
+
+<P><TT>SELECT * FROM TableName;</TT> </P>
+
+<P>Each database management system (DBMS) and database software has different
+methods for logging in to the database and entering SQL commands; see the
+local computer &quot;guru&quot; to help you get onto the system, so that
+you can use SQL. 
+<HR><A NAME="Conditional Selection"></A><FONT SIZE=+2><B>Conditional Selection</B>
+</FONT></P>
+
+<P>To further discuss the SELECT statement, let's look at a new example
+table (for hypothetical purposes only): </P>
+
+<TABLE BORDER=1 >
+<TR>
+<TD COLSPAN=4 WIDTH=541>
+<CENTER><P><B>EmployeeStatisticsTable</B> </P></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139><B>EmployeeIDNo</B></TD>
+
+<TD WIDTH=134><B>Salary</B> </TD>
+
+<TD WIDTH=134><B>Benefits</B></TD>
+
+<TD WIDTH=134><B>Position</B> </TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>010</TD>
+
+<TD WIDTH=134>75000</TD>
+
+<TD WIDTH=134>15000 </TD>
+
+<TD WIDTH=134>Manager</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>105</TD>
+
+<TD WIDTH=134>65000</TD>
+
+<TD WIDTH=134>15000 </TD>
+
+<TD WIDTH=134>Manager</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>152</TD>
+
+<TD WIDTH=134>60000</TD>
+
+<TD WIDTH=134>15000 </TD>
+
+<TD WIDTH=134>Manager</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>215</TD>
+
+<TD WIDTH=134>60000</TD>
+
+<TD WIDTH=134>12500 </TD>
+
+<TD WIDTH=134>Manager</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>244</TD>
+
+<TD WIDTH=134>50000</TD>
+
+<TD WIDTH=134>12000 </TD>
+
+<TD WIDTH=134>Staff</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>300</TD>
+
+<TD WIDTH=134>45000</TD>
+
+<TD WIDTH=134>10000 </TD>
+
+<TD WIDTH=134>Staff</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>335</TD>
+
+<TD WIDTH=134>40000</TD>
+
+<TD WIDTH=134>10000 </TD>
+
+<TD WIDTH=134>Staff</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>400</TD>
+
+<TD WIDTH=134>32000</TD>
+
+<TD WIDTH=134>7500 </TD>
+
+<TD WIDTH=134>Entry-Level</TD>
+</TR>
+
+<TR>
+<TD WIDTH=139>441</TD>
+
+<TD WIDTH=134>28000</TD>
+
+<TD WIDTH=134>7500 </TD>
+
+<TD WIDTH=134>Entry-Level</TD>
+</TR>
+</TABLE>
+
+<H4>
+<HR WIDTH="100%"><A NAME="Relational Operators"></A>Relational Operators
+</H4>
+
+<P>There are six Relational Operators in SQL, and after introducing them,
+we'll see how they're used: </P>
+
+<TABLE BORDER=1 >
+<TR>
+<TD WIDTH=103>=</TD>
+
+<TD WIDTH=180>Equal</TD>
+</TR>
+
+<TR>
+<TD WIDTH=103>&lt;&gt; or != (see manual)</TD>
+
+<TD WIDTH=180>Not Equal </TD>
+</TR>
+
+<TR>
+<TD WIDTH=103>&lt;</TD>
+
+<TD WIDTH=180>Less Than</TD>
+</TR>
+
+<TR>
+<TD WIDTH=103>&gt;</TD>
+
+<TD WIDTH=180>Greater Than</TD>
+</TR>
+
+<TR>
+<TD WIDTH=103>&lt;=</TD>
+
+<TD WIDTH=180>Less Than or Equal To</TD>
+</TR>
+
+<TR>
+<TD WIDTH=103>&gt;=</TD>
+
+<TD WIDTH=180>Greater Than or Equal To </TD>
+</TR>
+</TABLE>
+
+<P>The <I>WHERE </I>clause is used to specify that only certain rows of
+the table are displayed, based on the criteria described in that <I>WHERE
+clause</I>. It is most easily understood by looking at a couple of examples.</P>
+
+<P>If you wanted to see the EMPLOYEEIDNO's of those making at or over $50,000,
+use the following:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE SALARY &gt;= 50000;</TT></P>
+
+<P>Notice that the &gt;= (greater than or equal to) sign is used, as we
+wanted to see those who made greater than $50,000, or equal to $50,000,
+listed together. This displays:</P>
+
+<P><TT>EMPLOYEEIDNO<BR>
+------------<BR>
+010<BR>
+105<BR>
+152<BR>
+215<BR>
+244</TT></P>
+
+<P>The <I>WHERE</I> description, SALARY &gt;= 50000, is known as a <I>condition.</I>
+The same can be done for text columns:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION = 'Manager';</TT></P>
+
+<P>This displays the ID Numbers of all Managers. Generally, with text columns,
+stick to equal to or not equal to, and make sure that any text that appears
+in the statement is surrounded by single quotes (').</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Compound Conditions"></A><FONT SIZE=+1>More Complex
+Conditions: Compound Conditions</FONT></P>
+
+<P>The <I>AND</I> operator joins two or more conditions, and displays a
+row only if that row's data satisfies <B>ALL</B> conditions listed (i.e.
+all conditions hold true). For example, to display all staff making over
+$40,000, use:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE SALARY &gt; 40000 AND POSITION = 'Staff';</TT></P>
+
+<P>The <I>OR</I> operator joins two or more conditions, but returns a row
+if <B>ANY</B> of the conditions listed hold true. To see all those who
+make less than $40,000 or have less than $10,000 in benefits, listed together,
+use the following query:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE SALARY &lt; 40000 OR BENEFITS &lt; 10000;</TT></P>
+
+<P>AND &amp; OR can be combined, for example:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION = 'Manager' AND SALARY &gt; 60000 OR BENEFITS &gt; 12000;</TT></P>
+
+<P>First, SQL finds the rows where the salary is greater than $60,000 and
+the position column is equal to Manager, then taking this new list of rows,
+SQL then sees if any of these rows satisfies the previous AND&nbsp;condition
+or the condition that the Benefits column is greater then $12,000. Subsequently,
+SQL only displays this second new list of rows, keeping in mind that anyone
+with Benefits over $12,000 will be included as the OR&nbsp;operator includes
+a row if either resulting condition is True. Also note that the AND&nbsp;operation
+is done first.</P>
+
+<P>To generalize this process, SQL performs the AND&nbsp;operation(s) to
+determine the rows where the AND operation(s) hold true (remember: all
+of the conditions are true), then these results are used to compare with
+the OR&nbsp;conditions, and only display those remaining rows where the
+conditions joined by the OR&nbsp;operator hold true.</P>
+
+<P>To perform OR's before AND's, like if you wanted to see a list of employees
+making a large salary (&gt;$50,000) or have a large benefit package (&gt;$10,000),
+and that happen to be a manager, use parentheses:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION = 'Manager' AND&nbsp;(SALARY &gt; 50000 OR BENEFIT &gt;
+10000);</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="IN & BETWEEN"></A><B><I>IN &amp; BETWEEN</I></B></P>
+
+<P>An easier method of using compound conditions uses <I>IN</I> or <I>BETWEEN.</I>
+For example, if you wanted to list all managers and staff:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION IN ('Manager', 'Staff');</TT></P>
+
+<P>or to list those making greater than or equal to $30,000, but less than
+or equal to $50,000, use:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE SALARY BETWEEN 30000 AND 50000;</TT></P>
+
+<P>To list everyone not in this range, try:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE SALARY NOT BETWEEN 30000 AND 50000;</TT></P>
+
+<P>Similarly, NOT&nbsp;IN lists all rows excluded from the <I>IN</I> list.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Using LIKE"></A><B>Using<I> LIKE</I></B></P>
+
+<P>Look at the EmployeeStatisticsTable, and say you wanted to see all people
+whose last names started with &quot;L&quot;; try:</P>
+
+<P><TT>SELECT EMPLOYEEIDNO<BR>
+FROM EMPLOYEEADDRESSTABLE<BR>
+WHERE LASTNAME&nbsp;LIKE&nbsp;'L%';</TT></P>
+
+<P>The percent sign (%) is used to represent any possible character (number,
+letter, or punctuation) or set of characters that might appear after the
+&quot;L&quot;. To find those people with LastName's ending in &quot;L&quot;,
+use '%L', or if you wanted the &quot;L&quot; in the middle of the word,
+try '%L%'. The '%' can be used for any characters, in that relative position
+to the given characters. NOT&nbsp;LIKE displays rows not fitting the given
+description. Other possiblities of using LIKE, or any of these discussed
+conditionals, are available, though it depends on what DBMS you are using;
+as usual, consult a manual or your system manager or administrator for
+the available features on your system, or just to make sure that what you
+are trying to do is available and allowed. This disclaimer holds for the
+features of SQL that will be discussed below. This section is just to give
+you an idea of the possibilities of queries that can be written in SQL.
+
+<HR WIDTH="100%"><A NAME="Joins"></A><B><FONT SIZE=+2>Joins</FONT></B></P>
+
+<P>In this section, we will only discuss <I>inner</I> joins, and <I>equijoins</I>,
+as in general, they are the most useful. For more information, try the
+SQL links at the bottom of the page.</P>
+
+<P>Good database design suggests that each table lists data only about
+a single <I>entity</I>, and detailed information can be obtained in a relational
+database, by using additional tables, and by using a <I>join</I>.</P>
+
+<P>First, take a look at these example tables:</P>
+
+<TABLE BORDER=1 >
+<CAPTION>
+<P><B>AntiqueOwners</B></P>
+</CAPTION>
+
+<TR>
+<TD><B>OwnerID</B></TD>
+
+<TD><B>OwnerLastName</B></TD>
+
+<TD><B>OwnerFirstName</B></TD>
+</TR>
+
+<TR>
+<TD>01</TD>
+
+<TD>Jones</TD>
+
+<TD>Bill</TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>Smith</TD>
+
+<TD>Bob</TD>
+</TR>
+
+<TR>
+<TD>15</TD>
+
+<TD>Lawson</TD>
+
+<TD>Patricia</TD>
+</TR>
+
+<TR>
+<TD>21</TD>
+
+<TD>Akins</TD>
+
+<TD>Jane</TD>
+</TR>
+
+<TR>
+<TD>50</TD>
+
+<TD>Fowler</TD>
+
+<TD>Sam</TD>
+</TR>
+</TABLE>
+
+<P>
+<HR ALIGN=LEFT WIDTH="75%"></P>
+
+<TABLE BORDER=1 >
+<CAPTION>
+<P><B>Orders</B></P>
+</CAPTION>
+
+<TR>
+<TD><B>OwnerID</B></TD>
+
+<TD><B>ItemDesired</B></TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>Table</TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>Desk</TD>
+</TR>
+
+<TR>
+<TD>21</TD>
+
+<TD>Chair</TD>
+</TR>
+
+<TR>
+<TD>15</TD>
+
+<TD>Mirror</TD>
+</TR>
+</TABLE>
+
+<P>
+<HR ALIGN=LEFT WIDTH="50%"></P>
+
+<TABLE BORDER=1 >
+<CAPTION>
+<P><B>Antiques</B></P>
+</CAPTION>
+
+<TR>
+<TD><B>SellerID</B></TD>
+
+<TD><B>BuyerID</B></TD>
+
+<TD><B>Item</B></TD>
+</TR>
+
+<TR>
+<TD>01</TD>
+
+<TD>50</TD>
+
+<TD>Bed</TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>15</TD>
+
+<TD>Table</TD>
+</TR>
+
+<TR>
+<TD>15</TD>
+
+<TD>02</TD>
+
+<TD>Chair</TD>
+</TR>
+
+<TR>
+<TD>21</TD>
+
+<TD>50</TD>
+
+<TD>Mirror</TD>
+</TR>
+
+<TR>
+<TD>50</TD>
+
+<TD>01</TD>
+
+<TD>Desk</TD>
+</TR>
+
+<TR>
+<TD>01</TD>
+
+<TD>21</TD>
+
+<TD>Cabinet</TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>21</TD>
+
+<TD>Coffee Table</TD>
+</TR>
+
+<TR>
+<TD>15</TD>
+
+<TD>50</TD>
+
+<TD>Chair</TD>
+</TR>
+
+<TR>
+<TD>01</TD>
+
+<TD>15</TD>
+
+<TD>Jewelry Box</TD>
+</TR>
+
+<TR>
+<TD>02</TD>
+
+<TD>21</TD>
+
+<TD>Pottery</TD>
+</TR>
+
+<TR>
+<TD>21</TD>
+
+<TD>02</TD>
+
+<TD>Bookcase</TD>
+</TR>
+
+<TR>
+<TD>50</TD>
+
+<TD>01</TD>
+
+<TD>Plant Stand</TD>
+</TR>
+</TABLE>
+
+<P>
+<HR WIDTH="100%"><A NAME="Keys"></A><B>Keys</B></P>
+
+<P>First, let's discuss the concept of <I>keys</I>. A <I>primary key</I>
+is a column or set of columns that uniquely identifies the rest of the
+data in any given row. For example, in the AntiqueOwners table, the OwnerID
+column uniquely identifies that row. This means two things: no two rows
+can have the same OwnerID, and, even if two owners have the same first
+and last names, the OwnerID&nbsp;column ensures that the two owners will
+not be confused with each other, because the unique OwnerID column will
+be used throughout the database to track the owners, rather than the names.</P>
+
+<P>A<I> foreign key</I> is a column in a table where that column is a primary
+key of another table, which means that any data in a foreign key column
+must have corresponding data in the other table where that column is the
+primary key. In DBMS-speak, this correspondence is known as <I>referential
+integrity</I>. For example, in the Antiques table, both the BuyerID and
+SellerID are foreign keys to the primary key of the AntiqueOwners table
+(OwnerID; for purposes of argument, one has to be an Antique Owner before
+one can buy or sell any items), as, in both tables, the ID rows are used
+to identify the owners or buyers and sellers, and that the OwnerID is the
+primary key of the AntiqueOwners table. In other words, all of this &quot;ID&quot;
+data is used to refer to the owners, buyers, or sellers of antiques, themselves,
+without having to use the actual names.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Performing a Join"></A><B>Performing a Join</B></P>
+
+<P>The purpose of these <I>keys</I> is so that data can be related across
+tables, without having to repeat data in every table--this is the power
+of relational databases. For example, you can find the names of those who
+bought a chair without having to list the full name of the buyer in the
+Antiques table...you can get the name by relating those who bought a chair
+with the names in the AntiqueOwners table through the use of the OwnerID,
+which <I>relates</I> the data in the two tables. To find the names of those
+who bought a chair, use the following query:</P>
+
+<P><TT>SELECT OWNERLASTNAME, OWNERFIRSTNAME<BR>
+FROM ANTIQUEOWNERS, ANTIQUES<BR>
+WHERE BUYERID = OWNERID AND ITEM = 'Chair';</TT></P>
+
+<P>Note the following about this query...notice that both tables involved
+in the relation are listed in the FROM clause of the statement. In the
+WHERE clause, first notice that the ITEM = 'Chair' part restricts the listing
+to those who have bought (and in this example, thereby owns) a chair. Secondly,
+notice how the ID columns are related from one table to the next by use
+of the BUYERID = OWNERID clause. Only where ID's match across tables and
+the item purchased is a chair (because of the AND), will the names from
+the AntiqueOwners table be listed. Because the joining condition used an
+equal sign, this join is called an <I>equijoin</I>. The result of this
+query is two names: Smith, Bob &amp; Fowler, Sam.</P>
+
+<P><I>Dot notation</I> refers to prefixing the table names to column names,
+to avoid ambiguity, as such:</P>
+
+<P><TT>SELECT ANTIQUEOWNERS.OWNERLASTNAME, ANTIQUEOWNERS.OWNERFIRSTNAME<BR>
+FROM ANTIQUEOWNERS, ANTIQUES<BR>
+WHERE ANTIQUES.BUYERID = ANTIQUEOWNERS.OWNERID AND ANTIQUES.ITEM = 'Chair';</TT></P>
+
+<P>As the column names are different in each table, however, this wasn't
+necessary.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Eliminating Duplicates"></A><B><I>DISTINCT</I>
+and Eliminating Duplicates</B></P>
+
+<P>Let's say that you want to list the ID and names of <B>only</B> those
+people who have sold an antique. Obviously, you want a list where each
+seller is only listed once--you don't want to know how many antiques a
+person sold, just the fact that this person sold one (for counts, see the
+Aggregate Function section below). This means that you will need to tell
+SQL to eliminate duplicate sales rows, and just list each person only once.
+To do this, use the <I>DISTINCT</I> keyword.</P>
+
+<P>First, we will need an equijoin to the AntiqueOwners table to get the
+detail data of the person's LastName and FirstName. However, keep in mind
+that since the SellerID column in the Antiques table is a foreign key to
+the AntiqueOwners table, a seller will only be listed if there is a row
+in the AntiqueOwners table listing the ID and names. We also want to eliminate
+multiple occurences of the SellerID in our listing, so we use <I>DISTINCT
+</I><B>on the column where the repeats may occur.</B></P>
+
+<P>To throw in one more twist, we will also want the list alphabetized
+by LastName, then by FirstName (on a LastName tie), then by OwnerID (on
+a LastName and FirstName tie). Thus, we will use the <I>ORDER BY</I> clause:</P>
+
+<P><TT>SELECT DISTINCT SELLERID, OWNERLASTNAME, OWNERFIRSTNAME<BR>
+FROM ANTIQUES, ANTIQUEOWNERS<BR>
+WHERE SELLERID = OWNERID<BR>
+ORDER BY OWNERLASTNAME, OWNERFIRSTNAME, OWNERID;</TT></P>
+
+<P>In this example, since everyone has sold an item, we will get a listing
+of all of the owners, in alphabetical order by last name. For future reference
+(and in case anyone asks), this type of join is considered to be in the
+category of <I>inner joins.</I></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Aliases & In/Subqueries"></A><B>Aliases &amp;
+<I>In</I>/Subqueries</B></P>
+
+<P>In this section, we will talk about <I>Aliases</I>, <I>In</I> and the
+use of subqueries, and how these can be used in a 3-table example. First,
+look at this query which prints the last name of those owners who have
+placed an order and what the order is, only listing those orders which
+can be filled (that is, there is a buyer who owns that ordered item):</P>
+
+<P><TT>SELECT&nbsp;OWN.OWNERLASTNAME Last Name, ORD.ITEMDESIRED Item Ordered<BR>
+FROM ORDERS ORD, ANTIQUEOWNERS OWN<BR>
+WHERE ORD.OWNERID = OWN.OWNERID<BR>
+AND ORD.ITEMDESIRED IN</TT></P>
+
+<UL>
+<P><TT>(SELECT ITEM<BR>
+FROM ANTIQUES);</TT></P>
+</UL>
+
+<P>This gives:</P>
+
+<P><TT>Last Name Item Ordered<BR>
+--------- ------------<BR>
+Smith &nbsp;&nbsp;&nbsp;&nbsp;Table<BR>
+Smith&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Desk<BR>
+Akins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chair<BR>
+Lawson&nbsp;&nbsp;&nbsp;&nbsp;Mirror</TT></P>
+
+<P>There are several things to note about this query:</P>
+
+<OL>
+<LI>First, the &quot;Last Name&quot; and &quot;Item Ordered&quot; in the
+Select lines gives the headers on the report.</LI>
+
+<LI>The OWN &amp; ORD are aliases; these are new names for the two tables
+listed in the FROM clause that are used as prefixes for all dot notations
+of column names in the query (see above). This eliminates ambiguity, especially
+in the equijoin WHERE clause where both tables have the column named OwnerID,
+and the dot notation tells SQL that we are talking about two different
+OwnerID's from the two different tables.</LI>
+
+<LI>Note that the Orders table is listed first in the FROM clause; this
+makes sure listing is done off of that table, and the AntiqueOwners table
+is only used for the detail information (Last Name).</LI>
+
+<LI>Most importantly, the AND in the WHERE clause forces the In Subquery
+to be invoked (&quot;= ANY&quot; or &quot;= SOME&quot; are two equivalent
+uses of IN). What this does is, the subquery is performed, returning all
+of the Items owned from the Antiques table, as there is no WHERE clause.
+Then, for a row from the Orders table to be listed, the ItemDesired must
+be in that returned list of Items owned from the Antiques table, thus listing
+an item only if the order can be filled from another owner. You can think
+of it this way: the subquery returns a <I>set</I> of Items from which each
+ItemDesired in the Orders table is compared; the In condition is true only
+if the ItemDesired is in that returned set from the Antiques table.</LI>
+
+<LI>Also notice, that in this case, that there happened to be an antique
+available for each one desired...obviously, that won't always be the case.
+In addition, notice that when the IN, &quot;= ANY&quot;, or &quot;= SOME&quot;
+is used, that these keywords refer to any possible row matches, not column
+matches...that is, you cannot put multiple columns in the subquery Select
+clause, in an attempt to match the column in the outer Where clause to
+one of multiple possible column values in the subquery; only one column
+can be listed in the subquery, and the possible match comes from multiple
+<I>row</I> values in that <I>one</I> column, not vice-versa.</LI>
+</OL>
+
+<P>Whew! That's enough on the topic of complex SELECT queries for now.
+Now on to other SQL statements. 
+<HR WIDTH="100%"><B><FONT SIZE=+2>Miscellaneous SQL&nbsp;Statements</FONT></B></P>
+
+<P><A NAME="Aggregate Functions"></A><B>Aggregate Functions</B></P>
+
+<P>I will discuss five important <I>aggregate functions</I>: SUM, AVG,
+MAX, MIN, and COUNT. They are called aggregate functions because they summarize
+the results of a query, rather than listing all of the rows. </P>
+
+<UL>
+<LI>SUM () gives the total of all the rows, satisfying any conditions,
+of the given column, where the given column is numeric.</LI>
+
+<LI>AVG () gives the average of the given column.</LI>
+
+<LI>MAX&nbsp;() gives the largest figure in the given column.</LI>
+
+<LI>MIN () gives the smallest figure in the given column.</LI>
+
+<LI>COUNT(*) gives the number of rows satisfying the conditions.</LI>
+</UL>
+
+<P>Looking at the tables at the top of the document, let's look at three
+examples:</P>
+
+<P><TT>SELECT SUM(SALARY), AVG(SALARY)<BR>
+FROM EMPLOYEESTATISTICSTABLE;</TT></P>
+
+<P>This query shows the total of all salaries in the table, and the average
+salary of all of the entries in the table.</P>
+
+<P><TT>SELECT MIN(BENEFITS)<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION = 'Manager';</TT></P>
+
+<P>This query gives the smallest figure of the Benefits column, of the
+employees who are Managers, which is 12500.</P>
+
+<P><TT>SELECT COUNT(*)<BR>
+FROM EMPLOYEESTATISTICSTABLE<BR>
+WHERE POSITION = 'Staff';</TT></P>
+
+<P>This query tells you how many employees have Staff status (3).</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Views"></A><B>Views</B></P>
+
+<P>In SQL, you might (check your DBA) have access to create views for yourself.
+What a view does is to allow you to assign the results of a query to a
+new, personal table, that you can use in other queries, where this new
+table is given the view name in your FROM clause. When you access a view,
+the query that is defined in your view creation statement is performed
+(generally), and the results of that query look just like another table
+in the query that you wrote invoking the view. For example, to create a
+view:</P>
+
+<P><TT>CREATE VIEW ANTVIEW AS SELECT&nbsp;ITEMDESIRED&nbsp;FROM ORDERS;</TT></P>
+
+<P>Now, write a query using this view as a table, where the table is just
+a listing of all Items Desired from the Orders table:</P>
+
+<P><TT>SELECT SELLERID<BR>
+FROM ANTIQUES, ANTVIEW<BR>
+WHERE ITEMDESIRED = ITEM;</TT></P>
+
+<P>This query shows all SellerID's from the Antiques table where the Item
+in that table happens to appear in the Antview view, which is just all
+of the Items Desired in the Orders table. The listing is generated by going
+through the Antique Items one-by-one until there's a match with the Antview
+view. Views can be used to restrict database access, as well as, in this
+case, simplify a complex query.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Creating New Tables"></A><B>Creating New Tables</B></P>
+
+<P>All tables within a database must be created at some point in time...let's
+see how we would create the Orders table:</P>
+
+<P><TT>CREATE TABLE ORDERS<BR>
+(OWNERID INTEGER NOT NULL,<BR>
+ITEMDESIRED CHAR(40) NOT NULL);</TT></P>
+
+<P>This statement gives the table name and tells the DBMS about each column
+in the table. <B><I>Please note</I></B> that this statement uses generic
+data types, and that the data types might be different, depending on what
+DBMS you are using. As usual, check local listings. Some common generic
+data types are:</P>
+
+<UL>
+<LI>Char(x) - A column of characters, where x is a number designating the
+maximum number of characters allowed (maximum length) in the column.</LI>
+
+<LI>Integer - A column of whole numbers, positive or negative.</LI>
+
+<LI>Decimal(x, y) - A column of decimal numbers, where x is the maximum
+length in digits of the decimal numbers in this column, and y is the maximum
+number of digits allowed after the decimal point. The maximum (4,2) number
+would be 99.99.</LI>
+
+<LI>Date - A date column in a DBMS-specific format.</LI>
+
+<LI>Logical - A column that can hold only two values: TRUE&nbsp;or FALSE.</LI>
+</UL>
+
+<P>One other note, the NOT&nbsp;NULL means that the column must have a
+value in each row. If NULL was used, that column may be left empty in a
+given row.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Altering Tables"></A><B>Altering Tables</B></P>
+
+<P>Let's add a column to the Antiques table to allow the entry of the price
+of a given Item:</P>
+
+<P><TT>ALTER TABLE ANTIQUES ADD (PRICE DECIMAL(8,2) NULL);</TT></P>
+
+<P>The data for this new column can be updated or inserted as shown later.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Adding Data"></A><B>Adding Data</B></P>
+
+<P>To insert rows into a table, do the following:</P>
+
+<P><TT>INSERT INTO ANTIQUES VALUES (21, 01, 'Ottoman', 200.00);</TT></P>
+
+<P>This inserts the data into the table, as a new row, column-by-column,
+in the pre-defined order. Instead, let's change the order and leave Price
+blank:</P>
+
+<P><TT>INSERT INTO ANTIQUES (BUYERID, SELLERID, ITEM)<BR>
+VALUES (01, 21, 'Ottoman');</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Deleting Data"></A><B>Deleting Data</B></P>
+
+<P>Let's delete this new row back out of the database:</P>
+
+<P><TT>DELETE FROM ANTIQUES<BR>
+WHERE ITEM = 'Ottoman';</TT></P>
+
+<P>But if there is another row that contains 'Ottoman', that row will be
+deleted also. Let's delete all rows (one, in this case) that contain the
+specific data we added before:</P>
+
+<P><TT>DELETE FROM ANTIQUES<BR>
+WHERE ITEM = 'Ottoman' AND BUYERID = 01 AND SELLERID = 21;</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Updating Data"></A><B>Updating Data</B></P>
+
+<P>Let's update a Price into a row that doesn't have a price listed yet:</P>
+
+<P><TT>UPDATE ANTIQUES SET PRICE = 500.00 WHERE ITEM = 'Chair';</TT></P>
+
+<P>This sets all Chair's Prices to 500.00. As shown above, more WHERE conditionals,
+using AND, must be used to limit the updating to more specific rows. Also,
+additional columns may be set by separating equal statements with commas.</P>
+
+<P>
+<HR WIDTH="100%"><B><FONT SIZE=+2>Miscellaneous Topics</FONT></B></P>
+
+<P><A NAME="Indexes"></A><B><I><FONT SIZE=+1>Indexes</FONT></I></B></P>
+
+<P>Indexes allow a DBMS to access data quicker (<I>please note:</I> this
+feature is nonstandard/not available on all systems). The system creates
+this internal data structure (the index) which causes selection of rows,
+when the selection is based on indexed columns, to occur faster. This index
+tells the DBMS where a certain row is in the table given an indexed-column
+value, much like a book index tells you what page a given word appears.
+Let's create an index for the OwnerID in the AntiqueOwners column:</P>
+
+<P><TT>CREATE INDEX OID_IDX ON ANTIQUEOWNERS (OWNERID);</TT></P>
+
+<P>Now on the names:</P>
+
+<P><TT>CREATE INDEX NAME_IDX ON ANTIQUEOWNERS (OWNERLASTNAME, OWNERFIRSTNAME);</TT></P>
+
+<P>To get rid of an index, drop it:</P>
+
+<P><TT>DROP INDEX OID_IDX;</TT></P>
+
+<P>By the way, you can also &quot;drop&quot;&nbsp;a table, as well (careful!--that
+means that your table is deleted). In the second example, the index is
+kept on the two columns, aggregated together--strange behavior might occur
+in this situation...check the manual before performing such an operation.</P>
+
+<P>Some DBMS's do not enforce primary keys; in other words, the uniqueness
+of a column is not enforced automatically. What that means is, if, for
+example, I tried to insert another row into the AntiqueOwners table with
+an OwnerID of 02, some systems will allow me to do that, even though, we
+do not, as that column is supposed to be unique to that table (every row
+value is supposed to be different). One way to get around that is to create
+a unique index on the column that we want to be a primary key, to force
+the system to enforce prohibition of duplicates:</P>
+
+<P><TT>CREATE UNIQUE INDEX OID_IDX ON ANTIQUEOWNERS (OWNERID);</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="GROUP BY & HAVING"></A><B><I><FONT SIZE=+1>GROUP
+BY &amp; HAVING</FONT></I></B></P>
+
+<P>One special use of GROUP&nbsp;BY is to associate an aggregate function
+(especially COUNT; counting the number of rows in each group) with groups
+of rows. First, assume that the Antiques table has the Price column, and
+each row has a value for that column. We want to see the price of the most
+expensive item bought by each owner. We have to tell SQL to <I>group</I>
+each owner's purchases, and tell us the maximum purchase price:</P>
+
+<P><TT>SELECT BUYERID, MAX(PRICE)<BR>
+FROM ANTIQUES<BR>
+GROUP BY BUYERID;</TT></P>
+
+<P>Now, say we only want to see the maximum purchase price if the purchase
+is over $1000, so we use the HAVING clause:</P>
+
+<P><TT>SELECT BUYERID, MAX(PRICE)<BR>
+FROM ANTIQUES<BR>
+GROUP BY BUYERID<BR>
+HAVING PRICE &gt; 1000;</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="More Subqueries"></A><B><I><FONT SIZE=+1>More
+Subqueries</FONT></I></B></P>
+
+<P>Another common usage of subqueries involves the use of operators to
+allow a Where condition to include the Select output of a subquery. First,
+list the buyers who purchased an expensive item (the Price of the item
+is $100 greater than the average price of all items purchased):</P>
+
+<P><TT>SELECT OWNERID<BR>
+FROM ANTIQUES<BR>
+WHERE PRICE &gt;</TT></P>
+
+<UL>
+<P><TT>(SELECT AVG(PRICE) + 100<BR>
+FROM ANTIQUES);</TT></P>
+</UL>
+
+<P>The subquery calculates the average Price, plus $100, and using that
+figure, an OwnerID is printed for every item costing over that figure.
+One could use DISTINCT&nbsp;OWNERID, to eliminate duplicates.</P>
+
+<P>List the Last Names of those in the AntiqueOwners table, ONLY if they
+have bought an item:</P>
+
+<P><TT>SELECT OWNERLASTNAME<BR>
+FROM ANTIQUEOWNERS<BR>
+WHERE OWNERID =</TT></P>
+
+<UL>
+<P><TT>(SELECT DISTINCT BUYERID<BR>
+FROM ANTIQUES);</TT></P>
+</UL>
+
+<P>The subquery returns a list of buyers, and the Last Name is printed
+for an Antique Owner if and only if the Owner's ID appears in the subquery
+list (sometimes called a <I>candidate list</I>).</P>
+
+<P>For an Update example, we know that the gentleman who bought the bookcase
+has the wrong First Name in the database...it should be John:</P>
+
+<P><TT>UPDATE ANTIQUEOWNERS<BR>
+SET OWNERFIRSTNAME = 'John'<BR>
+WHERE OWNERID =</TT></P>
+
+<UL>
+<P><TT>(SELECT BUYERID<BR>
+FROM ANTIQUES<BR>
+WHERE ITEM = 'Bookcase');</TT></P>
+</UL>
+
+<P>First, the subquery finds the BuyerID for the person(s) who bought the
+Bookcase, then the outer query updates his First Name.</P>
+
+<P><B>Remember this rule about subqueries:</B> when you have a subquery
+as part of a WHERE condition, the Select clause in the subquery must have
+columns that match in number and type to those in the Where clause of the
+outer query. In other words, if you have &quot;<TT>WHERE ColumnName = (SELECT...);</TT>&quot;,
+the Select must have only one column in it, to match the ColumnName in
+the outer Where clause, <I>and</I> they must match in type (both being
+integers, both being character strings, etc.).</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="EXISTS & ALL"></A><B><I><FONT SIZE=+1>EXISTS
+&amp; ALL</FONT></I></B></P>
+
+<P>EXISTS uses a subquery as a condition, where the condition is True if
+the subquery returns any rows, and False if the subquery does not return
+any rows; this is a nonintuitive feature with few unique uses. However,
+if a prospective customer wanted to see the list of Owners only if the
+shop dealt in Chairs, try:</P>
+
+<P><TT>SELECT OWNERFIRSTNAME, OWNERLASTNAME<BR>
+FROM ANTIQUEOWNERS<BR>
+WHERE EXISTS</TT></P>
+
+<UL>
+<P><TT>(SELECT *<BR>
+FROM ANTIQUES<BR>
+WHERE ITEM = 'Chair');</TT></P>
+</UL>
+
+<P>If there are any Chairs in the Antiques column, the subquery would return
+a row or rows, making the EXISTS clause true, causing SQL to list the Antique
+Owners. If there had been no Chairs, no rows would have been returned by
+the outside query.</P>
+
+<P>ALL is another unusual feature, as ALL queries can usually be done with
+different, and possibly simpler methods; let's take a look at an example
+query:</P>
+
+<P><TT>SELECT BUYERID, ITEM<BR>
+FROM ANTIQUES<BR>
+WHERE PRICE &gt;= ALL</TT></P>
+
+<UL>
+<P><TT>(SELECT PRICE<BR>
+FROM ANTIQUES);</TT></P>
+</UL>
+
+<P>This will return the largest priced item (or more than one item if there
+is a tie), and its buyer. The subquery returns a list of all Prices in
+the Antiques table, and the outer query goes through each row of the Antiques
+table, and if its Price is greater than or equal to every (or ALL) Prices
+in the list, it is listed, giving the highest priced Item. The reason &quot;&gt;=&quot;
+must be used is that the highest priced item will be equal to the highest
+price on the list, because this Item is in the Price list.</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="UNION & Outer Joins"></A><B><I><FONT SIZE=+1>UNION
+&amp; Outer Joins</FONT></I></B></P>
+
+<P>There are occasions where you might want to see the results of multiple
+queries together, combining their output; use UNION. To merge the output
+of the following two queries, displaying the ID's of all Buyers, plus all
+those who have an Order placed:</P>
+
+<P><TT>SELECT BUYERID<BR>
+FROM ANTIQUEOWNERS<BR>
+UNION<BR>
+SELECT OWNERID<BR>
+FROM ORDERS;</TT></P>
+
+<P>Notice that SQL requires that the Select list (of columns) must match,
+column-by-column, in data type. In this case BuyerID and OwnerID are of
+the same data type (integer). Also notice that SQL does automatic duplicate
+elimination when using UNION (as if they were two &quot;sets&quot;); in
+single queries, you have to use DISTINCT.</P>
+
+<P>The <I>outer join</I> is used when a join query is &quot;united&quot;
+with the rows not included in the join, and are especially useful if constant
+text &quot;flags&quot; are included. First, look at the query:</P>
+
+<P><TT>SELECT OWNERID, 'is in both Orders &amp; Antiques'<BR>
+FROM ORDERS, ANTIQUES<BR>
+WHERE OWNERID = BUYERID<BR>
+UNION<BR>
+SELECT BUYERID, 'is in Antiques only'<BR>
+FROM ANTIQUES<BR>
+WHERE BUYERID NOT IN</TT></P>
+
+<UL>
+<P><TT>(SELECT OWNERID<BR>
+FROM ORDERS);</TT></P>
+</UL>
+
+<P>The first query does a join to list any owners who are in both tables,
+and putting a tag line after the ID repeating the quote. The UNION merges
+this list with the next list. The second list is generated by first listing
+those ID's not in the Orders table, thus generating a list of ID's excluded
+from the join query. Then, each row in the Antiques table is scanned, and
+if the BuyerID is not in this exclusion list, it is listed with its quoted
+tag. There might be an easier way to make this list, but it's difficult
+to generate the informational quoted strings of text.</P>
+
+<P>This concept is useful in situations where a primary key is related
+to a foreign key, but the foreign key value for some primary keys is NULL.
+For example, in one table, the primary key is a salesperson, and in another
+table is customers, with their salesperson listed in the same row. However,
+if a salesperson has no customers, that person's name won't appear in the
+customer table. The outer join is used if the listing of <B>all</B> salespersons
+is to be printed, listed with their customers, whether the salesperson
+has a customer or not--that is, no customer is printed (a logical NULL
+value) if the salesperson has no customers, but is in the salespersons
+table. Otherwise, the salesperson will be listed with each customer.</P>
+
+<P>ENOUGH&nbsp;QUERIES!!! you say?...now on to something completely different...</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Embedded SQL"></A><B><I><FONT SIZE=+1>Embedded
+SQL--an ugly example (do not write a program like this...for purposes of
+argument ONLY)</FONT></I></B></P>
+
+<P><TT>/* -To get right to it, here is an example program that uses Embedded<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;SQL. Embedded SQL allows programmers to connect
+to a database&nbsp;and<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;include SQL code right in the program, so that
+their programs can<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;use, manipulate, and process data from a database.<BR>
+&nbsp;&nbsp;&nbsp;-This example C Program (using Embedded SQL) will print
+a report.<BR>
+&nbsp;&nbsp;&nbsp;-This program will have to be precompiled for the SQL
+statements,<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;before regular compilation.<BR>
+&nbsp;&nbsp;&nbsp;-The EXEC SQL parts are the same (standard), but the
+surrounding C<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;code will need to be changed, including the host
+variable<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;declarations, if you are using a different language.<BR>
+&nbsp;&nbsp;&nbsp;-Embedded SQL changes from system to system, so, once
+again, check<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;local documentation, especially variable declarations
+and logging<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;in procedures, in which network, DBMS, and operating
+system<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;considerations are crucial. */</TT></P>
+
+<P><TT>/************************************************/<BR>
+/* THIS PROGRAM IS NOT COMPILABLE OR EXECUTABLE */<BR>
+/* IT IS FOR EXAMPLE PURPOSES ONLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*/<BR>
+/************************************************/</TT></P>
+
+<P><TT>#include &lt;stdio.h&gt;</TT></P>
+
+<P><TT>/* This section declares the host variables; these will be the<BR>
+&nbsp;&nbsp;&nbsp;variables your program uses, but also the variable SQL
+will put<BR>
+&nbsp;&nbsp;&nbsp;values in or take values out. */<BR>
+EXEC SQL BEGIN DECLARE SECTION;<BR>
+&nbsp;&nbsp;int BuyerID;<BR>
+&nbsp;&nbsp;char FirstName[100], LastName[100], Item[100];<BR>
+EXEC SQL END DECLARE SECTION;</TT></P>
+
+<P><TT>/* This includes the SQLCA variable, so that some error checking
+can be done. */<BR>
+EXEC SQL INCLUDE SQLCA;</TT></P>
+
+<P><TT>main() {</TT></P>
+
+<P><TT>/* This is a possible way to log into the database */<BR>
+EXEC SQL CONNECT UserID/Password;</TT></P>
+
+<P><TT>/* This code either says that you are connected or checks if an
+error<BR>
+&nbsp;&nbsp;&nbsp;code was generated, meaning log in was incorrect or not
+possible. */ &nbsp;&nbsp;if(sqlca.sqlcode) {<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(Printer, &quot;Error connecting to database
+server.\n&quot;);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;exit();<BR>
+&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;printf(&quot;Connected to database server.\n&quot;);</TT></P>
+
+<P><TT>/* This declares a &quot;Cursor&quot;. This is used when a query
+returns more<BR>
+&nbsp;&nbsp;&nbsp;than one row, and an operation is to be performed on
+each row<BR>
+&nbsp;&nbsp;&nbsp;resulting from the query. With each row established by
+this query,<BR>
+&nbsp;&nbsp;&nbsp;I'm going to use it in the report. Later, &quot;Fetch&quot;
+will be used to<BR>
+&nbsp;&nbsp;&nbsp;pick off each row, one at a time, but for the query to
+actually<BR>
+&nbsp;&nbsp;&nbsp;be executed, the &quot;Open&quot; statement is used.
+The &quot;Declare&quot; just<BR>
+&nbsp;&nbsp;&nbsp;establishes the query. */<BR>
+EXEC SQL DECLARE ItemCursor CURSOR FOR<BR>
+&nbsp;&nbsp;SELECT ITEM, BUYERID<BR>
+&nbsp;&nbsp;FROM ANTIQUES<BR>
+&nbsp;&nbsp;ORDER BY ITEM;<BR>
+EXEC SQL OPEN ItemCursor;</TT></P>
+
+<P><TT>/* +-- You may wish to put a similar error checking block here --+
+*/</TT></P>
+
+<P><TT>/* Fetch puts the values of the &quot;next&quot; row of the query
+in the host<BR>
+&nbsp;&nbsp;&nbsp;variables, respectively. However, a &quot;priming fetch&quot;
+(programming<BR>
+&nbsp;&nbsp;&nbsp;technique) must first be done. When the cursor is out
+of data, a<BR>
+&nbsp;&nbsp;&nbsp;sqlcode will be generated allowing us to leave the loop.
+Notice<BR>
+&nbsp;&nbsp;&nbsp;that, for simplicity's sake, the loop will leave on any
+sqlcode,<BR>
+&nbsp;&nbsp;&nbsp;even if it is an error code. Otherwise, specific code
+checking must<BR>
+&nbsp;&nbsp;&nbsp;be performed. */<BR>
+EXEC SQL FETCH ItemCursor INTO :Item, :BuyerID;<BR>
+&nbsp;&nbsp;while(!sqlca.sqlcode) {</TT></P>
+
+<P><TT>/* With each row, we will also do a couple of things. First, bump
+the<BR>
+&nbsp;&nbsp;&nbsp;price up by $5 (dealer's fee) and get the buyer's name
+to put in<BR>
+&nbsp;&nbsp;&nbsp;the report. To do this, I'll use an Update and a Select,
+before<BR>
+&nbsp;&nbsp;&nbsp;printing the line on the screen. The update assumes however,
+that<BR>
+&nbsp;&nbsp;&nbsp;a given buyer has only bought one of any given item,
+or else the<BR>
+&nbsp;&nbsp;&nbsp;price will be increased too many times. Otherwise, a
+&quot;RowID&quot; logic<BR>
+&nbsp;&nbsp;&nbsp;would have to be used (see documentation). Also notice
+the colon &nbsp;&nbsp;&nbsp;before host variable names when used inside
+of SQL statements. */</TT></P>
+
+<P><TT>EXEC SQL UPDATE ANTIQUES<BR>
+&nbsp;&nbsp;SET PRICE = PRICE + 5<BR>
+&nbsp;&nbsp;WHERE ITEM = :Item AND BUYERID = :BuyerID;</TT></P>
+
+<P><TT>EXEC SQL SELECT OWNERFIRSTNAME, OWNERLASTNAME<BR>
+&nbsp;&nbsp;INTO :FirstName, :LastName<BR>
+&nbsp;&nbsp;FROM ANTIQUEOWNERS<BR>
+&nbsp;&nbsp;WHERE BUYERID = :BuyerID;</TT></P>
+
+<P><TT>&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%25s %25s %25s&quot;, FirstName,
+LastName, Item);</TT></P>
+
+<P><TT>/* Ugly report--for example purposes only! Get the next row. */<BR>
+EXEC SQL FETCH ItemCursor INTO :Item, :BuyerID;<BR>
+&nbsp;&nbsp;}</TT></P>
+
+<P><TT>/* Close the cursor, commit the changes (see below), and exit the<BR>
+&nbsp;&nbsp;&nbsp;program. */<BR>
+EXEC SQL CLOSE DataCursor;<BR>
+EXEC SQL COMMIT RELEASE;<BR>
+&nbsp;&nbsp;exit();<BR>
+}</TT></P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Common SQL Questions"></A><B><I><FONT SIZE=+1>Common
+SQL Questions--Advanced Topics (see FAQ link for several more)</FONT></I></B></P>
+
+<OL>
+<LI>Why can't I just ask for the first three rows in a table? --Because
+in relational databases, rows are inserted in no particular order, that
+is, the system inserts them in an arbitrary order; so, you can only request
+rows using valid SQL features, like ORDER&nbsp;BY, etc.</LI>
+
+<LI>What is this DDL and DML I hear about? --DDL (Data Definition Language)
+refers to (in SQL) the Create Table statement...DML (Data Manipulation
+Language) refers to the Select, Update, Insert, and Delete statements.</LI>
+
+<LI>Aren't database tables just files? --Well, DBMS's store data in files
+declared by system managers before new tables are created (on large systems),
+but the system stores the data in a special format, and may spread data
+from one table over several files. In the database world, a set of files
+created for a database is called a <I>tablespace</I>. In general, on small
+systems, everything about a database (definitions and all table data) is
+kept in one file.</LI>
+
+<LI>(Related question) Aren't database tables just like spreadsheets? --No,
+for two reasons. First, spreadsheets can have data in a cell, but a cell
+is more than just a row-column-intersection. Depending on your spreadsheet
+software, a cell might also contain formulas and formatting, which database
+tables cannot have (currently). Secondly, spreadsheet cells are often dependent
+on the data in other cells. In databases, &quot;cells&quot; are independent,
+except that columns are logically related (hopefully; together a row of
+columns describe an entity), and, other than primary key and foreign key
+constraints, each row in a table in independent from one another.</LI>
+
+<LI>How do I import a text file of data into a database? --Well, you can't
+do it directly...you must use a utility, such as Oracle's SQL*Loader, or
+write a program to load the data into the database. A program to do this
+would simply go through each record of a text file, break it up into columns,
+and do an Insert into the database.</LI>
+
+<LI>What is a <I>schema</I>? --A schema is a logical set of tables, such
+as the Antiques database above...usually, it is thought of as simply &quot;the
+database&quot;, but a database can hold more than one schema. For example,
+a <I>star schema</I> is a set of tables where one large, central table
+holds all of the important information, and is linked, via foreign keys,
+to <I>dimension</I> tables which hold detail information, and can be used
+in a join to create detailed reports.</LI>
+
+<LI>What are some general tips you would give to make my SQL queries and
+databases better and faster (<I>optimized</I>)?</LI>
+
+<UL>
+<LI>You should try, if you can, to avoid expressions in Selects, such as
+SELECT ColumnA + ColumnB, etc. The <I>query optimizer</I> of the database,
+the portion of the DBMS that determines the best way to get the required
+data out of the database itself, handles expressions in such a way that
+would normally require more time to retrieve the data than if columns were
+normally selected, and the expression itself handled programmatically.</LI>
+
+<LI>Minimize the number of columns included in a Group By clause.</LI>
+
+<LI>If you are using a join, try to have the columns joined on (from both
+tables) indexed.</LI>
+
+<LI>When in doubt, index.</LI>
+
+<LI>Unless doing multiple counts or a complex query, use COUNT(*) (the
+number of rows generated by the query) rather than COUNT(Column_Name).</LI>
+</UL>
+
+<LI>What is <I>normalization</I>? --Normalization is a technique of database
+design that suggests that certain criteria be used when constructing a
+table layout (deciding what columns each table will have, and creating
+the key structure), where the idea is to eliminate redundancy of non-key
+data across tables. Normalization is usually referred to in terms of <I>forms</I>,
+and I will introduce only the first three, even though it is somewhat common
+to use other, more advanced forms (fourth, fifth, Boyce-Codd; see documentation).
+<BR>
+<BR>
+<I>First Normal Form</I> refers to moving data into separate tables where
+the data in each table is of a similar type, and by giving each table a
+primary key. <BR>
+<BR>
+Putting data in <I>Second Normal Form</I> involves taking out data off
+to other tables that is only dependent of a part of the key. For example,
+if I had left the names of the Antique Owners in the items table, that
+would not be in second normal form because that data would be redundant;
+the name would be repeated for each item owned, so the names were placed
+in their own table. The names themselves don't have anything to do with
+the items, only the identities of the buyers and sellers. <BR>
+<BR>
+<I>Third Normal Form</I> involves getting rid of anything in the tables
+that doesn't depend solely on the primary key. Only include information
+that is dependent on the key, and move off data to other tables that are
+independent of the primary key, and create a primary keys for the new tables.
+<BR>
+<BR>
+There is some redundancy to each form, and if data is in <I>3NF </I>(shorthand
+for 3rd normal form), it is already in <I>1NF </I>and <I>2NF</I>. In terms
+of data design then, arrange data so that any non-primary key columns are
+dependent only on the <I>whole primary key</I>. If you take a look at the
+sample database, you will see that the way then to navigate through the
+database is through joins using common key columns. <BR>
+<BR>
+Two other important points in database design are using good, consistent,
+logical, full-word names for the tables and columns, and the use of full
+words in the database itself. On the last point, my database is lacking,
+as I use numeric codes for identification. It is usually best, if possible,
+to come up with keys that are, by themselves, self-explanatory; for example,
+a better key would be the first four letters of the last name and first
+initial of the owner, like JONEB for Bill Jones (or for tiebreaking purposes,
+add numbers to the end to differentiate two or more people with similar
+names, so you could try JONEB1, JONEB2, etc.).</LI>
+
+<LI>What is the difference between a <I>single-row query</I> and a <I>multiple-row
+query</I> and why is it important to know the difference? --First, to cover
+the obvious, a single-row query is a query that returns one row as its
+result, and a multiple-row query is a query that returns more than one
+row as its result. Whether a query returns one row or more than one row
+is entirely dependent on the design (or <I>schema</I>) of the tables of
+the database. As query-writer, you must be aware of the schema, be sure
+to include enough conditions, and structure your SQL statement properly,
+so that you will get the desired result (either one row or multiple rows).
+For example, if you wanted to be sure that a query of the AntiqueOwners
+table returned only one row, consider an equal condition of the primary
+key-column, OwnerID.<BR>
+<BR>
+Three reasons immediately come to mind as to why this is important. First,
+getting multiple rows when you were expecting only one, or vice-versa,
+may mean that the query is erroneous, that the database is incomplete,
+or simply, you learned something new about your data. Second, if you are
+using an update or delete statement, you had better be sure that the statement
+that you write performs the operation on the desired row (or rows)...or
+else, you might be deleting or updating more rows than you intend. Third,
+any queries written in Embedded SQL must be carefully thought out as to
+the number of rows returned. If you write a single-row query, only one
+SQL statement may need to be performed to complete the programming logic
+required. If your query, on the other hand, returns multiple rows, you
+will have to use the Fetch statement, and quite probably, some sort of
+looping structure in your program will be required to iterate processing
+on each returned row of the query.</LI>
+
+<LI>What are <I>relationships?</I> --Another design question...the term
+&quot;relationships&quot; (often termed &quot;relation&quot;) usually refers
+to the relationships among primary and foreign keys between tables. This
+concept is important because when the tables of a relational database are
+designed, these relationships must be defined because they determine which
+columns are or are not primary or foreign keys. You may have heard of an
+<B>Entity-Relationship Diagram</B>, which is a graphical view of tables
+in a database schema, with lines connecting related columns across tables.
+See the sample diagram at the end of this section or some of the sites
+below in regard to this topic, as there are many different ways of drawing
+E-R diagrams. But first, let's look at each kind of relationship...<BR>
+<BR>
+A <I>One-to-one relationship</I> means that you have a primary key column
+that is related to a foreign key column, and that for every primary key
+value, there is <B>one</B> foreign key value. For example, in the first
+example, the EmployeeAddressTable, we add an EmployeeIDNo column. Then,
+the EmployeeAddressTable is related to the EmployeeStatisticsTable (second
+example table) by means of that EmployeeIDNo. Specifically, each employee
+in the EmployeeAddressTable <B>has</B> statistics (one row of data) in
+the EmployeeStatisticsTable. Even though this is a contrived example, this
+is a &quot;1-1&quot; relationship. Also notice the &quot;has&quot; in bold...when
+expressing a relationship, it is important to describe the relationship
+with a verb.<BR>
+<BR>
+The other two kinds of relationships may or may not use logical primary
+key and foreign key constraints...it is strictly a call of the designer.
+The first of these is the <I>one-to-many relationship</I> (&quot;1-M&quot;).
+This means that for every column value in one table, there is <B>one or
+more</B> related values in another table. Key constraints may be added
+to the design, or possibly just the use of some sort of identifier column
+may be used to establish the relationship. An example would be that for
+every OwnerID in the AntiqueOwners table, there are one or more (zero is
+permissible too) Items <B>bought</B> in the Antiques table (verb: buy).<BR>
+<BR>
+Finally, the <I>many-to-many relationship</I> (&quot;M-M&quot;) does not
+involve keys generally, and usually involves idenifying columns. The unusual
+occurence of a &quot;M-M&quot; means that one column in one table is related
+to another column in another table, and for every value of one of these
+two columns, there are one or more related values in the corresponding
+column in the other table (and vice-versa), or more a common possibility,
+two tables have a 1-M relationship to each other (two relationships, one
+1-M going each way). A [bad] example of the more common situation would
+be if you had a job assignment database, where one table held one row for
+each employee and a job assignment, and another table held one row for
+each job with one of the assigned employees. Here, you would have multiple
+rows for each employee in the first table, one for each job assignment,
+and multiple rows for each job in the second table, one for each employee
+assigned to the project. These tables have a M-M: each employee in the
+first table <B>has</B> many job assignments from the second table, and
+each job <B>has</B> many employees assigned to it from the first table.
+This is the tip of the iceberg on this topic...see the links below for
+more information and see the diagram below for a <I>simplified</I> example
+of an E-R diagram.<BR>
+<IMG SRC="erdiagram.gif" ALT="Sample Simplified Entity-Relationship Diagram" HEIGHT=280 WIDTH=561></LI>
+
+<LI>What are some important nonstandard SQL features (extremely common
+question)? --Well, see the next section...</LI>
+</OL>
+
+<P>
+<HR WIDTH="100%"><A NAME="Nonstandard SQL"></A><B><I><FONT SIZE=+1>Nonstandard
+SQL...&quot;check local listings&quot;</FONT></I></B></P>
+
+<UL>
+<LI>INTERSECT&nbsp;and MINUS are like the UNION&nbsp;statement, except
+that INTERSECT produces rows that appear in both queries, and MINUS produces
+rows that result from the first query, but not the second.</LI>
+
+<LI>Report Generation Features: the COMPUTE&nbsp;clause is placed at the
+end of a query to place the result of an aggregate function at the end
+of a listing, like <TT>COMPUTE SUM (PRICE); </TT>Another option is to use
+break logic: define a break to divide the query results into groups based
+on a column, like <TT>BREAK ON BUYERID</TT>. Then, to produce a result
+after the listing of a group, use <TT>COMPUTE SUM OF PRICE ON BUYERID</TT>.
+If, for example, you used all three of these clauses (BREAK first, COMPUTE
+on break second, COMPUTE overall sum third), you would get a report that
+grouped items by their BuyerID, listing the sum of Prices after each group
+of a BuyerID's items, then, after all groups are listed, the sum of all
+Prices is listed, all with SQL-generated headers and lines.</LI>
+
+<LI>In addition to the above listed aggregate functions, some DBMS's allow
+more functions to be used in Select lists, except that these functions
+(some character functions allow multiple-row results) are to be used with
+an individual value (not groups), on <I>single-row queries. </I>The functions
+are to be used only on appropriate data types, also. Here are some <B>Mathematical
+Functions</B>:<BR>
+</LI>
+
+<TABLE BORDER=1 >
+<TR>
+<TD><B>ABS(X)</B></TD>
+
+<TD>Absolute value-converts negative numbers to positive, or leaves positive
+numbers alone</TD>
+</TR>
+
+<TR>
+<TD><B>CEIL(X)</B></TD>
+
+<TD>X is a decimal value that will be rounded up.</TD>
+</TR>
+
+<TR>
+<TD><B>FLOOR(X)</B></TD>
+
+<TD>X is a decimal value that will be rounded down.</TD>
+</TR>
+
+<TR>
+<TD><B>GREATEST(X,Y)</B></TD>
+
+<TD>Returns the largest of the two values.</TD>
+</TR>
+
+<TR>
+<TD><B>LEAST(X,Y)</B></TD>
+
+<TD>Returns the smallest of the two values.</TD>
+</TR>
+
+<TR>
+<TD><B>MOD(X,Y)</B></TD>
+
+<TD>Returns the remainder of X / Y.</TD>
+</TR>
+
+<TR>
+<TD><B>POWER(X,Y)</B></TD>
+
+<TD>Returns X to the power of Y.</TD>
+</TR>
+
+<TR>
+<TD><B>ROUND(X,Y)</B></TD>
+
+<TD>Rounds X to Y decimal places. If Y is omitted, X is rounded to the
+nearest integer.</TD>
+</TR>
+
+<TR>
+<TD><B>SIGN(X)</B></TD>
+
+<TD>Returns a minus if X &lt; 0, else a plus.</TD>
+</TR>
+
+<TR>
+<TD><B>SQRT(X)</B></TD>
+
+<TD>Returns the square root of X.</TD>
+</TR>
+</TABLE>
+
+<TABLE BORDER=1 >
+<CAPTION>
+<P><B>Character Functions</B></P>
+</CAPTION>
+
+<TR>
+<TD><B>LEFT(&lt;string&gt;,X)</B></TD>
+
+<TD>Returns the leftmost X characters of the string.</TD>
+</TR>
+
+<TR>
+<TD><B>RIGHT(&lt;string&gt;,X)</B></TD>
+
+<TD>Returns the rightmost X characters of the string.</TD>
+</TR>
+
+<TR>
+<TD><B>UPPER(&lt;string&gt;)</B></TD>
+
+<TD>Converts the string to all uppercase letters.</TD>
+</TR>
+
+<TR>
+<TD><B>LOWER(&lt;string&gt;)</B></TD>
+
+<TD>Converts the string to all lowercase letters.</TD>
+</TR>
+
+<TR>
+<TD><B>INITCAP(&lt;string&gt;)</B></TD>
+
+<TD>Converts the string to initial caps.</TD>
+</TR>
+
+<TR>
+<TD><B>LENGTH(&lt;string&gt;)</B></TD>
+
+<TD>Returns the number of characters in the string.</TD>
+</TR>
+
+<TR>
+<TD><B>&lt;string&gt;||&lt;string&gt;</B></TD>
+
+<TD>Combines the two strings of text into one, <I>concatenated</I> string,
+where the first string is immediately followed by the second.</TD>
+</TR>
+
+<TR>
+<TD><B>LPAD(&lt;string&gt;,X,'*')</B></TD>
+
+<TD>Pads the string on the left with the * (or whatever character is inside
+the quotes), to make the string X characters long.</TD>
+</TR>
+
+<TR>
+<TD><B>RPAD(&lt;string&gt;,X,'*')</B></TD>
+
+<TD>Pads the string on the right with the * (or whatever character is inside
+the quotes), to make the string X characters long.</TD>
+</TR>
+
+<TR>
+<TD><B>SUBSTR(&lt;string&gt;,X,Y)</B></TD>
+
+<TD>Extracts Y letters from the string beginning at position X.</TD>
+</TR>
+
+<TR>
+<TD><B>NVL(&lt;column&gt;,&lt;value&gt;)</B></TD>
+
+<TD>The Null value function will substitute &lt;value&gt; for any NULLs
+for in the &lt;column&gt;. If the current value of &lt;column&gt; is not
+NULL, NVL has no effect.</TD>
+</TR>
+</TABLE>
+</UL>
+
+<P>
+<HR WIDTH="100%"><A NAME="Syntax Summary"></A><B><FONT SIZE=+2>Syntax Summary--For
+Advanced Users Only</FONT></B></P>
+
+<P>Here are the general forms of the statements discussed in this tutorial,
+plus some extra important ones (explanations given). <B>REMEMBER</B> that
+all of these statements may or may not be available on your system, so
+check documentation regarding availability:</P>
+
+<P><TT><B>ALTER&nbsp;TABLE </B>&lt;TABLE NAME&gt; ADD|DROP|MODIFY (COLUMN
+SPECIFICATION[S]...see Create Table); </TT>--allows you to add or delete
+a column or columns from a table, or change the specification (data type,
+etc.) on an existing column; this statement is also used to change the
+physical specifications of a table (how a table is stored, etc.), but these
+definitions are DBMS-specific, so read the documentation. Also, these physical
+specifications are used with the Create Table statement, when a table is
+first created. In addition, only one option can be performed per Alter
+Table statement--either add, drop, <B>OR </B>modify in a single statement.</P>
+
+<P><TT><B>COMMIT</B>;</TT> --makes changes made to some database systems
+permanent (since the last COMMIT; known as a <I>transaction</I>)</P>
+
+<P><TT><B>CREATE [UNIQUE] INDEX</B> &lt;INDEX NAME&gt;<BR>
+ON &lt;TABLE NAME&gt; (&lt;COLUMN LIST&gt;); </TT>--UNIQUE is optional;
+within brackets.</P>
+
+<P><TT><B>CREATE TABLE</B> &lt;TABLE NAME&gt;<BR>
+(&lt;COLUMN NAME&gt; &lt;DATA TYPE&gt; [(&lt;SIZE&gt;)] &lt;COLUMN CONSTRAINT&gt;,<BR>
+...other columns); (</TT>also valid with ALTER&nbsp;TABLE)<BR>
+--where SIZE is only used on certain data types (see above), and constraints
+include the following possibilities (automatically enforced by the DBMS;
+failure causes an error to be generated):</P>
+
+<OL>
+<LI>NULL or NOT&nbsp;NULL (see above)</LI>
+
+<LI>UNIQUE enforces that no two rows will have the same value for this
+column</LI>
+
+<LI>PRIMARY&nbsp;KEY tells the database that this column is the primary
+key column (only used if the key is a one column key, otherwise a PRIMARY&nbsp;KEY
+(column, column, ...) statement appears after the last column definition.</LI>
+
+<LI>CHECK allows a condition to be checked for when data in that column
+is updated or inserted; for example, <TT>CHECK (PRICE &gt; 0)</TT> causes
+the system to check that the Price column is greater than zero before accepting
+the value...sometimes implemented as the CONSTRAINT statement.</LI>
+
+<LI>DEFAULT inserts the default value into the database if a row is inserted
+without that column's data being inserted; for example, <TT>BENEFITS INTEGER
+DEFAULT = 10000</TT></LI>
+
+<LI>FOREIGN KEY works the same as Primary Key, but is followed by: <TT>REFERENCES
+&lt;TABLE NAME&gt; (&lt;COLUMN NAME&gt;)</TT>, which refers to the referential
+primary key.</LI>
+</OL>
+
+<P><TT><B>CREATE VIEW</B> &lt;TABLE NAME&gt; AS &lt;QUERY&gt;;</TT></P>
+
+<P><TT><B>DELETE</B> FROM &lt;TABLE NAME&gt; WHERE &lt;CONDITION&gt;;</TT></P>
+
+<P><TT><B>INSERT</B> INTO &lt;TABLE NAME&gt; [(&lt;COLUMN LIST&gt;)]<BR>
+VALUES (&lt;VALUE LIST&gt;);</TT></P>
+
+<P><TT><B>ROLLBACK</B>; </TT>--Takes back any changes to the database that
+you have made, back to the last time you gave a Commit command...beware!
+Some software uses automatic committing on systems that use the transaction
+features, so the Rollback command may not work.</P>
+
+<P><TT><B>SELECT</B> [DISTINCT|ALL] &lt;LIST OF COLUMNS, FUNCTIONS, CONSTANTS,
+ETC.&gt;<BR>
+FROM &lt;LIST OF TABLES OR VIEWS&gt;<BR>
+[WHERE &lt;CONDITION(S)&gt;]<BR>
+[GROUP BY &lt;GROUPING COLUMN(S)&gt;]<BR>
+[HAVING &lt;CONDITION&gt;]<BR>
+[ORDER BY &lt;ORDERING COLUMN(S)&gt; [ASC|DESC]]; </TT>--where ASC|DESC
+allows the ordering to be done in ASCending or DESCending order</P>
+
+<P><TT><B>UPDATE</B> &lt;TABLE NAME&gt;<BR>
+SET &lt;COLUMN NAME&gt; = &lt;VALUE&gt;<BR>
+[WHERE &lt;CONDITION&gt;]; </TT>--if the Where clause is left out, all
+rows will be updated according to the Set statement</P>
+
+<P>
+<HR WIDTH="100%"><A NAME="Important Links"></A><B>Important Links</B></P>
+
+<P>Computing &amp; SQL/DB Links: <A HREF="http://home.netscape.com">Netscape</A>
+-- <A HREF="http://www.oracle.com">Oracle</A> -- <A HREF="http://www.sybase.com">Sybase</A>
+-- <A HREF="http://www.informix.com">Informix</A> --<A HREF="http://www.microsoft.com">Microsoft<BR>
+</A><A HREF="http://www.contrib.andrew.cmu.edu/~shadow/sql.html">SQL Reference
+Page</A> -- <A HREF="http://www.inquiry.com/techtips/thesqlpro/">Ask the
+SQL Pro</A> -- <A HREF="http://www.inquiry.com/techtips/thesqlpro/usefulsites.html">SQL
+Pro's Relational DB Useful Sites<BR>
+</A><A HREF="http://infoweb.magi.com/~steve/develop.html">Programmer's
+Source</A> -- <A HREF="http://info.itu.ch/special/wwwfiles/comp_db.html">DBMS
+Sites</A> -- <A HREF="http://www.inquiry.com">inquiry.com</A> -- <A HREF="http://www.compapp.dcu.ie/databases/f017.html">DB
+Ingredients</A> <BR>
+<A HREF="http://www.stars.com/Tutorial/CGI/">Web Authoring</A> -- <A HREF="http://wfn-shop.princeton.edu/cgi-bin/foldoc">Computing
+Dictionary</A> -- <A HREF="http://www-ccs.cs.umass.edu/db.html">DBMS Lab/Links</A>
+-- <A HREF="http://epoch.CS.Berkeley.EDU:8000/sequoia/dba/montage/FAQ/SQL_TOC.html">SQL
+FAQ</A> -- <A HREF="http://chaos.mur.csu.edu.au/itc125/cgi/sqldb.html">SQL
+Databases</A> <BR>
+<A HREF="http://www.it.rit.edu/~wjs/IT/199602/icsa720/icsa720postings.html">RIT
+Database Design Page</A> -- <A HREF="http://www.pcslink.com/~ej/dbweb.html">Database
+Jump Site</A> -- <A HREF="http://www.eng.uc.edu/~jtilley/tutorial.html">Programming
+Tutorials on the Web</A> <BR>
+<A HREF="http://www.ndev.com/ndc2/support/resources.htp">Development Resources</A>
+-- <A HREF="http://ashok.pair.com/sql.htm">Query List</A> -- <A HREF="http://jazz.external.hp.com/training/sqltables/main.html">IMAGE
+SQL</A> </P>
+
+<P>Miscellaneous: <A HREF="http://www.cnn.com">CNN</A> -- <A HREF="http://www.usatoday.com">USA
+Today</A> -- <A HREF="http://www.pathfinder.com">Pathfinder</A> -- <A HREF="http://www.zdnet.com">ZDNet</A>
+-- <A HREF="http://metroscope.com">Metroscope</A> -- <A HREF="http://www.cnet.com">CNet</A>
+<BR>
+<A HREF="http://www.eit.com/web/netservices.html">Internet Resource List</A>
+-- <A HREF="http://netcast.noaa.gov/cgi-bin/page?pg=netcast">Netcast Weather</A>
+-- <A HREF="http://www.techweb.com">TechWeb</A> -- <A HREF="http://www.looksmart.com">LookSmart</A> </P>
+
+<P>Search Engines: <A HREF="http://www.yahoo.com">Yahoo</A> -- <A HREF="http://www.altavista.digital.com">Alta
+Vista</A> -- <A HREF="http://www.excite.com">Excite</A> -- <A HREF="http://webcrawler.com">WebCrawler</A>
+-- <A HREF="http://www.lycos.com">Lycos</A> -- <A HREF="http://www.infoseek.com">Infoseek</A>
+-- <A HREF="http://www.search.com">search.com</A></P>
+
+<P><FONT SIZE=-1>These sites are not endorsed by the author. 
+<HR WIDTH="100%"></FONT><B>Disclaimer</B></P>
+
+<P>I hope you have learned something from this introductory look at a very
+important language that is becoming more prevalent in the world of client-server
+computing. I wrote this web page in order to contribute something of value
+to the web and the web community. In fact, I have been informed that this
+document is being used at several colleges for use in database classes
+and for use by researchers. Also, look for this page in Waite Publishing's
+newest book about Borland C++ Builder, which will be out this summer, and
+in an upcoming Sams Publishing release. In addition, I would like to thank
+all of the people from across five continents who have contacted me regarding
+this web page.</P>
+
+<P>I also hope to continue to add more material to this tutorial, such
+as topics about database design and nonstandard SQL extensions, even though
+I wish to stay away from material about individual Database Management
+Systems. Good luck in your SQL and other computing adventures.</P>
+
+<P>Jim Hoffman 
+<HR WIDTH="100%">Comments or suggestions? Mail me at <A HREF="mailto:jhoffman@one.net">jhoffman@one.net.</A></P>
+
+<P>Or you may wish to look at <A HREF="http://w3.one.net/~jhoffman/index.html">Jim
+Hoffman's Web Pages</A> for more information about myself.</P>
+
+<P><FONT SIZE=-1>Copyright 1996-1997, James Hoffman. This document can
+be used for free by any Internet user, but cannot be included in another
+document, published in any other form, or mass produced in any way.</FONT></P>
+
+<P>This page is best viewed with <A HREF="http://home.netscape.com">Netscape
+Navigator</A>; it doesn't look quite right with <A HREF="http://www.microsoft.com/ie">Microsoft
+Internet Explorer.</A> </P>
+
+<P><I>Last updated: 8-25-1997; added some material.</I></P>
+
+<P><TT>http://w3.one.net/~jhoffman/sqltut.htm</TT></P>
+
+</BODY>
+</HTML>

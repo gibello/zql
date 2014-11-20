@@ -1,0 +1,37 @@
+Zql sample code
+===============
+
+Note: prior to running any sample code, the classpath has to point on the ZQL
+jar file, eg. ../zql-parser/target/zql-1.0-SNAPSHOT.jar .
+
+The sample code is divided in 2 packages:
+
+1) org.gibello.zql.sample.api: contains some source code that demonstrates
+the use of Zql APIs.
+
+Here... the code is the doc !
+
+2) org.gibello.zql.sample.data: shows how Zql can be used to manipulate data
+and evaluate expressions.
+
+The data demo comes with 2 "database" files: num.db and contact.db, and 2
+"queries" files: queries.num and queries.contact (in datafiles/ directory).
+
+They are text files: num.db is a list of numbers, contact.db a list of contacts
+with names and e-mails.
+The data demo allows to query those two files in SQL: queries are very simple
+(no joins, no aggregate functions):
+you can have a look at queries.num or queries.contact, they contain query
+examples.
+
+To run the data demo:
+
+java org.gibello.zql.sample.data.ZDataDemo
+
+then send queries like "select * from num;", etc...
+
+You can also run the demo with the sample queries:
+java org.gibello.zql.sample.data.ZDataDemo queries.num
+ or
+java org.gibello.zql.sample.data.ZDataDemo queries.contact
+

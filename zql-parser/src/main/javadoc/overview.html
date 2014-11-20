@@ -1,0 +1,91 @@
+<html>
+<body bgcolor="#FFFFFF">
+
+<h2>What is Zql ?</h2>
+
+Zql is a SQL parser written in Java.<br>
+
+Zql parses SQL and fills in java structures representing SQL statements and
+expressions.<p>
+
+Zql can parse all the queries given as examples in the following
+<a href="doc-files/sqltut.html">SQL tutorial</a> (a now old version of
+<a href="http://www.dbbm.fiocruz.br/class/Lecture/d17/sql/jhoffman/sqltut.html">James Hoffman's SQL tutorial</a>).<p>
+
+An SQL expression evaluator comes with Zql, so you can easily evaluate
+SQL expressions out of the parser.<br>
+
+<h2>Warning: No warranty !</h2>
+
+Zql is no commercial product (license: GNU GPLv3).
+Feel free to use it, but we provide no warranty.<br>
+Zql APIs may be subject to changes, to enrich functionalities or fix bugs.<p>
+
+<h2>How to use Zql ?</h2>
+
+<li>
+Make your CLASSPATH variable point on the zql jar file.
+</li>
+<li>
+Type <code>java org.gibello.zql.ZqlParser</code>, then some SQL statements (like
+<code>select * from customer;</code>) to make sure Zql is properly installed.
+</li>
+<li>
+The Zql source code comes with some examples and tests, so you can discover how to leverage Zql to write your own SQL application!
+</li>
+</ul>
+
+<a href="doc-files/ztest.html">Some SQL queries for heavy testing... (used in Zql junit test case)</a><p>
+
+<h2>More details</h2>
+
+The parser itself is written with
+<a href="https://javacc.dev.java.net">JavaCC</a>, a Java parser generator (like
+Unix's popular yacc generator).<p>
+
+It takes as input SQL statements (select, insert, update, delete, commit,
+rollback, set transaction), and fills in Java structures that represent the
+statements it parsed.<p>
+
+Example:<br>
+<code>
+SELECT ANTIQUEOWNERS.OWNERLASTNAME, ANTIQUEOWNERS.OWNERFIRSTNAME<br>
+FROM ANTIQUEOWNERS, ANTIQUES<br>
+WHERE ANTIQUES.BUYERID = ANTIQUEOWNERS.OWNERID AND ANTIQUES.ITEM = 'Chair';<br>
+</code>
+<p>
+
+Will result in a ZqlQuery structure.<br>
+ZqlQuery's getSelect(), getFrom() and getWhere() methods will extract the
+SELECT, FROM and WHERE parts of the query.<br>
+
+<ul>
+<li>
+getSelect() will return a Vector of ZSelectItem, data structures that give
+information about the columns and/or operations requested (including
+SQL expression support, like in <code>SELECT a+b FROM num;</code>).<br>
+</li>
+<li>
+getFrom() will return a Vector of ZFromItem, data structures that give
+information about the tables involved in the query.<br>
+</li>
+<li>
+getWhere() will return an SQL expression, a data structure that represents
+<code>ANTIQUES.BUYERID = ANTIQUEOWNERS.OWNERID AND ANTIQUES.ITEM = 'Chair'
+</code> in the example above (the expression evaluator that comes with
+Zql can evaluate such expressions, for a given data tuple).<p>
+</li>
+</ul>
+
+<h2>Some history...</h2>
+The 1st release of SQL came to the net on March 10... 1998 (!).<br/>
+After a long proprietary life, I finally decided to open the code,
+in september 2010.<br/>
+In the meantime, some bugs were fixed and some enhancements added, most of
+them minor. Note I haven't been working a lot on Zql since the 1st release,
+and most of the work was finished in late 2002.<br/>
+Zql was re-packaged for maven in 2014.<br/>
+
+</body>
+</html>
+
