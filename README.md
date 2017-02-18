@@ -1,4 +1,4 @@
-Zql
+Zql [![Build Status](https://travis-ci.org/monrealis/zql.svg?branch=master)](https://travis-ci.org/monrealis/zql)
 ===
 
 Zql is a java SQL parser, generated using JavaCC.
