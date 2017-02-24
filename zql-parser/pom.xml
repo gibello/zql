@@ -13,7 +13,7 @@
   <name>Zql java SQL parser</name>
 
   <properties>
-    <java.compiler.version>1.7</java.compiler.version>
+    <java.compiler.version>1.5</java.compiler.version>
   </properties>
 
   <dependencies>
