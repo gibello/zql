@@ -13,14 +13,14 @@
   <name>Zql java SQL parser</name>
 
   <properties>
-    <java.compiler.version>1.5</java.compiler.version>
+    <java.compiler.version>11</java.compiler.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.13.1</version>
     </dependency>
   </dependencies>
 
